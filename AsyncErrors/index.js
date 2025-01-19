@@ -62,12 +62,14 @@ app.use((err, req, res, next) => {
   next(err)
 })
 
-app.get("/products/:id/edit", wrapAsync(async (req, res) => {
-  const { id } = req.params;
-  const product = await Product.findById(id)
-  console.log("product", product);
-  res.render("products/edit", { product });
-}));
+app.get("/products/:id/edit",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id)
+    console.log("product", product);
+    res.render("products/edit", { product });
+  })
+);
 
 // create new product post call
 app.post("/products/", wrapAsync(async (req, res, next) => {
