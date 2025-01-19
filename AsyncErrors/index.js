@@ -99,10 +99,16 @@ app.put("/products/:id", wrapAsync(async (req, res) => {
   // res.send('PUTT!!')
   res.redirect(`/products/${product._id}`);
 }));
-
-app.use((error, req, res, next) => {
-  const { status = 500, message = 'SOMETHING WENT WRONG' } = error
-  res.status(status).send(message)
+const handleValidationErr = err => {
+  console.dir(err)
+  return new AppError(`Validation Failed... ${err.message}`, 400)
+}
+app.use((err, req, res, next) => {
+  const { status = 500, message = 'SOMETHING WENT WRONG' } = err
+  console.log('==error name is ==', err.name)
+  if (err.name === 'ValidationError') err = handleValidationErr(err)
+    next(err)
+  // res.status(status).send(message)
 })
 
 app.listen(3000, () => {
